@@ -3,6 +3,7 @@
     --bg: #f3f4f6;
     --card-bg: #ffffff;
     --text: #1f2937;
+    --accent: #eff6ff;
 }
 
 body {
@@ -18,25 +19,88 @@ body {
 
 .container {
     width: 100%;
-    max-width: 400px;
+    max-width: 450px; /* Slightly wider for the new inputs */
     padding: 20px;
     text-align: center;
+    position: relative;
 }
 
+.top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+#lang-btn {
+    background: none;
+    border: 1px solid #d1d5db;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+#lang-btn:hover { background-color: #e5e7eb; }
+
 h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-p { color: #6b7280; margin-bottom: 2rem; }
+p { color: #6b7280; margin-bottom: 1.5rem; }
 
 .calculator-card {
     background: var(--card-bg);
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
     text-align: left;
+}
+
+/* Mode Selector (Radio Buttons) */
+.mode-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+    background: #f9fafb;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.radio-label {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+}
+
+.radio-label input {
+    display: none; /* Hide actual radio button */
+}
+
+.radio-label span {
+    display: block;
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #6b7280;
+    transition: all 0.2s;
+}
+
+.radio-label input:checked + span {
+    background-color: white;
+    color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 1.5rem 0;
 }
 
 .form-group { margin-bottom: 1rem; }
 .row { display: flex; gap: 1rem; }
 .row .form-group { flex: 1; }
+
+/* Utility to hide elements */
+.hidden { display: none; }
 
 label {
     display: block;
@@ -51,19 +115,25 @@ input, select {
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 1rem;
-    box-sizing: border-box; /* Fixes padding issues */
+    box-sizing: border-box;
 }
 
 input:focus, select:focus {
     outline: none;
     border-color: var(--primary);
-    ring: 2px solid var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1.5rem;
 }
 
 .result-box {
-    margin-top: 1.5rem;
     padding: 1rem;
-    background-color: #eff6ff;
+    background-color: var(--accent);
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
@@ -71,10 +141,27 @@ input:focus, select:focus {
     border: 1px solid #bfdbfe;
 }
 
-#result {
-    font-size: 1.5rem;
+.result-box.secondary {
+    background-color: #f9fafb;
+    border-color: #e5e7eb;
+}
+
+.result-box span:last-child {
+    font-size: 1.25rem;
     font-weight: bold;
     color: var(--primary);
+}
+
+.result-box.secondary span:last-child {
+    color: #4b5563;
+}
+
+.info-text {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    text-align: center;
+    font-style: italic;
 }
 
 footer {
