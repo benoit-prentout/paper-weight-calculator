@@ -1,6 +1,6 @@
 /* --- COLORS VARIABLES --- */
 :root {
-    /* Light Mode (Default) */
+    /* Light Mode */
     --bg: #f3f4f6;
     --text: #1f2937;
     --text-muted: #6b7280;
@@ -8,26 +8,27 @@
     --primary: #2563eb;
     --input-bg: #ffffff;
     --input-border: #d1d5db;
-    --accent-bg: #eff6ff;      /* Light blue background for main result */
+    --accent-bg: #eff6ff;
     --accent-border: #bfdbfe;
-    --secondary-bg: #f9fafb;   /* Gray background for secondary result */
+    --secondary-bg: #f9fafb;
     --secondary-border: #e5e7eb;
     --divider: #e5e7eb;
     --radio-bg: #f9fafb;
     --radio-active: #ffffff;
     --shadow: rgba(0, 0, 0, 0.1);
+    --btn-hover: #e5e7eb; /* Hover color for top buttons */
 }
 
-/* Dark Mode Overrides */
+/* Dark Mode */
 [data-theme="dark"] {
-    --bg: #111827;             /* Very dark blue/gray */
-    --text: #f3f4f6;           /* White-ish */
+    --bg: #111827;
+    --text: #f3f4f6;
     --text-muted: #9ca3af;
-    --card-bg: #1f2937;        /* Dark gray panel */
-    --primary: #60a5fa;        /* Lighter blue for contrast on dark */
+    --card-bg: #1f2937;
+    --primary: #60a5fa;
     --input-bg: #374151;
     --input-border: #4b5563;
-    --accent-bg: #1e3a8a;      /* Dark blue for result */
+    --accent-bg: #1e3a8a;
     --accent-border: #2563eb;
     --secondary-bg: #374151;
     --secondary-border: #4b5563;
@@ -35,6 +36,7 @@
     --radio-bg: #374151;
     --radio-active: #4b5563;
     --shadow: rgba(0, 0, 0, 0.5);
+    --btn-hover: #374151; /* Dark hover color */
 }
 
 /* --- GLOBAL STYLES --- */
@@ -47,7 +49,7 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
@@ -57,28 +59,51 @@ body {
     text-align: center;
 }
 
-/* --- TOP BAR (Buttons) --- */
+/* --- NEW MINIMALIST TOP BAR --- */
 .top-bar {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 8px; /* Space between buttons */
+    margin-bottom: 15px;
 }
 
-.top-bar button {
-    background: var(--card-bg);
-    border: 1px solid var(--input-border);
-    padding: 8px 12px;
-    border-radius: 8px;
+.icon-btn {
+    background: transparent;
+    border: none;
     cursor: pointer;
-    font-size: 1.2rem;
-    transition: transform 0.1s, background-color 0.3s;
-    color: var(--text);
+    padding: 8px;
+    border-radius: 50%; /* Perfect circle */
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    width: 40px;
+    height: 40px;
 }
 
-.top-bar button:hover {
-    transform: scale(1.1);
-    background-color: var(--secondary-bg);
+.icon-btn:hover {
+    background-color: var(--btn-hover);
+    color: var(--text);
+    transform: scale(1.05);
+}
+
+/* Text button (Language) specific tweaks */
+.text-btn {
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+/* SVG Icon Sizing */
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text); }
@@ -128,11 +153,7 @@ p { color: var(--text-muted); margin-bottom: 1.5rem; }
     box-shadow: 0 2px 4px var(--shadow);
 }
 
-.divider {
-    border: 0;
-    border-top: 1px solid var(--divider);
-    margin: 1.5rem 0;
-}
+.divider { border: 0; border-top: 1px solid var(--divider); margin: 1.5rem 0; }
 
 /* --- FORMS --- */
 .form-group { margin-bottom: 1rem; }
@@ -196,7 +217,7 @@ input:focus, select:focus {
 }
 
 .result-box.secondary span:last-child {
-    color: var(--text); /* Better contrast in dark mode */
+    color: var(--text);
 }
 
 .info-text {
@@ -207,8 +228,4 @@ input:focus, select:focus {
     font-style: italic;
 }
 
-footer {
-    margin-top: 2rem;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
+footer { margin-top: 2rem; font-size: 0.75rem; color: var(--text-muted); }
