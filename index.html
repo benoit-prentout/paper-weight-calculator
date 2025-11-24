@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Weight Calculator</title>
+    <meta name="google-site-verification" content="vqvdZhIzQwxxnQaVIvAxqFVmhrrpcOyqoLXnZ-tRaeE" />
+    
+    <title>Calculateur Poids Papier & Volume / Paper Weight Calculator (Free)</title>
+    <meta name="description" content="Outil gratuit pour calculer le poids du papier, la hauteur de pile et le poids de brochures. Free tool to calculate paper weight, ream weight, and stack height for printing.">
+    <meta name="keywords" content="calcul poids papier, paper weight calculator, gsm calculator, grammage papier, imprimerie, paper bulk, spine width, a4 weight, benoît prentout">
+    <meta name="author" content="Benoît Prentout">
+
+    <meta property="og:title" content="Calculateur Poids Papier / Paper Weight Calculator">
+    <meta property="og:description" content="Calculez facilement le poids de vos impressions et brochures. Outil gratuit et open-source.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://benoit-prentout.github.io/paper-weight-calculator/"> 
+    <meta property="og:image" content="https://benoit-prentout.github.io/paper-weight-calculator/share-image.png">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -36,9 +50,12 @@
         <div class="form-group">
             <label for="format" data-i18n="label_format">Format</label>
             <select id="format">
-                <option value="a6">A6 (105 x 148 mm)</option> 
-                <option value="a5">A5 (148 x 210 mm)</option>
                 <option value="custom" data-i18n="opt_custom">Custom Size</option>
+                <option value="a3">A3 (297 x 420 mm)</option>
+                <option value="a4" selected>A4 (210 x 297 mm)</option>
+                <option value="a5">A5 (148 x 210 mm)</option>
+                <option value="a6">A6 (105 x 148 mm)</option>
+                <option value="business_card" data-i18n="opt_card">Business Card (85 x 55 mm)</option>
             </select>
         </div>
 
@@ -82,9 +99,22 @@
 
         <div class="info-text" id="formula-display"></div>
     </div>
+
+    <div class="seo-content" style="margin-top: 30px; font-size: 0.85rem; color: var(--text-muted); text-align: justify; opacity: 0.8; line-height: 1.5;">
+        <h2 style="font-size: 1rem; text-align: center; margin-bottom: 10px;" data-i18n="seo_title">About this tool</h2>
+        <p data-i18n="seo_text">
+            This free tool helps printers, graphic designers, and logistics managers calculate the total weight of a paper order. 
+            It supports standard formats (A4, A3, A5, A6), paper weight (GSM), and quantity. 
+            It also estimates the stack height (bulk) for shipping and the weight of stitched brochures or books.
+        </p>
+    </div>
     
     <footer>
-        <p>Open source project hosted on GitHub.</p>
+        <p data-i18n="footer_open">Open source project hosted on GitHub.</p>
+        <p class="creator">
+            <span data-i18n="footer_by">Created by</span> 
+            <a href="https://github.com/benoit-prentout" target="_blank" rel="noopener">Benoît Prentout</a>
+        </p>
     </footer>
 </div>
 
