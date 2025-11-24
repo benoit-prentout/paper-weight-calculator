@@ -1,5 +1,4 @@
 // --- CONFIGURATION & DATA ---
-
 const sizes = {
     a4: { w: 210, h: 297 },
     a3: { w: 297, h: 420 },
@@ -23,7 +22,6 @@ const translations = {
         label_quantity: "Quantity (Copies)",
         res_weight: "Total Weight:",
         res_height: "Stack Height:",
-        btn_lang: "Français",
         formula_sheet: "Formula: Width x Height x GSM x Qty",
         formula_brochure: "Formula: Width x Height x GSM x (Pages / 2) x Qty"
     },
@@ -42,63 +40,72 @@ const translations = {
         label_quantity: "Quantité (Exemplaires)",
         res_weight: "Poids Total :",
         res_height: "Hauteur Pile :",
-        btn_lang: "English",
         formula_sheet: "Formule : Largeur x Hauteur x Grammage x Qté",
         formula_brochure: "Formule : Largeur x Hauteur x Grammage x (Pages / 2) x Qté"
     }
 };
 
 // --- DOM ELEMENTS ---
-
+const themeBtn = document.getElementById('theme-btn');
 const langBtn = document.getElementById('lang-btn');
 const modeRadios = document.querySelectorAll('input[name="mode"]');
 const pagesGroup = document.getElementById('pages-group');
 const formatSelect = document.getElementById('format');
-const widthInput = document.getElementById('width');
-const heightInput = document.getElementById('height');
-const gsmInput = document.getElementById('gsm');
-const pagesInput = document.getElementById('pages');
-const quantityInput = document.getElementById('quantity');
+const inputs = [
+    document.getElementById('width'),
+    document.getElementById('height'),
+    document.getElementById('gsm'),
+    document.getElementById('pages'),
+    document.getElementById('quantity')
+];
 const resultWeight = document.getElementById('result-weight');
 const resultHeight = document.getElementById('result-height');
 const formulaDisplay = document.getElementById('formula-display');
 
-// State variables
+// --- STATE ---
 let currentLang = 'en';
-let currentMode = 'sheet'; // 'sheet' or 'brochure'
+let currentMode = 'sheet';
+let isDarkMode = false;
 
 // --- FUNCTIONS ---
 
-// 1. Language Switcher
+// 1. Theme Switcher
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    // Set attribute on HTML tag for CSS to detect
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+    // Change Icon: If Dark mode is active, show Sun (to switch back), else Moon
+    themeBtn.textContent = isDarkMode ? '☀️' : '🌙';
+}
+
+// 2. Language Switcher
 function updateLanguage() {
-    // Update all text elements with data-i18n attribute
+    // Translate Text
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[currentLang][key]) {
             el.textContent = translations[currentLang][key];
         }
     });
+
+    // Update Flag Button: Show the flag of the OTHER language (the destination)
+    langBtn.textContent = currentLang === 'en' ? '🇫🇷' : '🇬🇧';
     
-    // Update button text
-    langBtn.textContent = translations[currentLang].btn_lang;
-    
-    // Update Formula Text
     updateFormulaText();
 }
 
 function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'fr' : 'en';
     updateLanguage();
+    calculate(); // Recalculate to update potential units text if any
 }
 
-// 2. Mode Switcher (Sheet vs Brochure)
+// 3. Mode Switcher
 function updateMode() {
-    // Get selected mode
     modeRadios.forEach(radio => {
         if (radio.checked) currentMode = radio.value;
     });
 
-    // Show/Hide Pages Input
     if (currentMode === 'brochure') {
         pagesGroup.classList.remove('hidden');
     } else {
@@ -117,83 +124,59 @@ function updateFormulaText() {
     }
 }
 
-// 3. Main Calculation Logic
+// 4. Calculation Logic
 function calculate() {
-    const width_mm = parseFloat(widthInput.value) || 0;
-    const height_mm = parseFloat(heightInput.value) || 0;
-    const gsm = parseFloat(gsmInput.value) || 0;
-    const quantity = parseFloat(quantityInput.value) || 0;
-    const pages = parseFloat(pagesInput.value) || 0;
+    const width_m = (parseFloat(inputs[0].value) || 0) / 1000;
+    const height_m = (parseFloat(inputs[1].value) || 0) / 1000;
+    const gsm = parseFloat(inputs[2].value) || 0;
+    const pages = parseFloat(inputs[3].value) || 0;
+    const quantity = parseFloat(inputs[4].value) || 0;
 
-    // Convert dimensions to meters
-    const width_m = width_mm / 1000;
-    const height_m = height_mm / 1000;
-
-    // Determine Physical Sheet Count
-    // If Brochure: (Pages / 2) * Copies
-    // If Sheet: 1 * Copies
     let totalPhysicalSheets = 0;
     let totalWeightGrams = 0;
 
     if (currentMode === 'brochure') {
-        // Brochure Formula: Area * GSM * (Pages/2) * Qty
         const sheetsPerCopy = pages / 2;
         totalWeightGrams = (width_m * height_m * gsm * sheetsPerCopy * quantity);
         totalPhysicalSheets = sheetsPerCopy * quantity;
     } else {
-        // Sheet Formula: Area * GSM * Qty
         totalWeightGrams = (width_m * height_m * gsm * quantity);
         totalPhysicalSheets = quantity;
     }
 
-    // --- WEIGHT RESULT ---
-    // Convert to KG
+    // Weight
     const weightInKg = totalWeightGrams / 1000;
-    
     if (weightInKg < 1) {
         resultWeight.textContent = totalWeightGrams.toFixed(1) + " g";
     } else {
         resultWeight.textContent = weightInKg.toFixed(2) + " kg";
     }
 
-    // --- HEIGHT RESULT ("Will it fit?") ---
-    // Estimation: Standard paper thickness in microns is approx equal to GSM (bulk 1.0)
-    // Formula: (GSM * TotalPhysicalSheets) / 1000 = Total Thickness in mm
-    // Divide by 10 to get CM
-    const thickness_mm = (gsm * totalPhysicalSheets) / 1000;
-    const thickness_cm = thickness_mm / 10;
-
+    // Height (Stack)
+    const thickness_cm = ((gsm * totalPhysicalSheets) / 1000) / 10;
     resultHeight.textContent = thickness_cm.toFixed(1) + " cm";
 }
 
-// --- EVENT LISTENERS ---
-
-// Language Toggle
+// --- EVENTS ---
+themeBtn.addEventListener('click', toggleTheme);
 langBtn.addEventListener('click', toggleLanguage);
-
-// Mode Toggle
-modeRadios.forEach(radio => radio.addEventListener('change', updateMode));
-
-// Format Dropdown
+modeRadios.forEach(r => r.addEventListener('change', updateMode));
 formatSelect.addEventListener('change', (e) => {
-    const selected = e.target.value;
-    if (sizes[selected]) {
-        widthInput.value = sizes[selected].w;
-        heightInput.value = sizes[selected].h;
-    }
-    calculate();
-});
-
-// Inputs
-[widthInput, heightInput, gsmInput, pagesInput, quantityInput].forEach(input => {
-    input.addEventListener('input', () => {
-        if (input === widthInput || input === heightInput) {
-            formatSelect.value = 'custom';
-        }
+    if (sizes[e.target.value]) {
+        inputs[0].value = sizes[e.target.value].w;
+        inputs[1].value = sizes[e.target.value].h;
         calculate();
-    });
+    }
 });
+inputs.forEach(i => i.addEventListener('input', () => {
+    if (i === inputs[0] || i === inputs[1]) formatSelect.value = 'custom';
+    calculate();
+}));
 
-// --- INITIALIZE ---
+// --- INIT ---
+// Check system preference for dark mode
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    toggleTheme(); 
+}
 updateLanguage();
-updateMode(); // This also triggers calculate()
+updateMode();
