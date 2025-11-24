@@ -3,53 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open Source Paper Weight Calculator</title>
+    <title>Paper Weight & Volume Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>📄 Paper Weight Calculator</h1>
-    <p>Calculate the total weight of your print job instantly.</p>
+    <div class="top-bar">
+        <button id="lang-btn">Français</button>
+    </div>
+
+    <h1 data-i18n="title">📄 Paper Weight Calculator</h1>
+    <p data-i18n="subtitle">Calculate weight and stack height for sheets or brochures.</p>
 
     <div class="calculator-card">
+        
+        <div class="mode-selector">
+            <label class="radio-label">
+                <input type="radio" name="mode" value="sheet" checked>
+                <span data-i18n="mode_sheet">Standard Sheet</span>
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="mode" value="brochure">
+                <span data-i18n="mode_brochure">Brochure / Book</span>
+            </label>
+        </div>
+
+        <hr class="divider">
+
         <div class="form-group">
-            <label for="format">Paper Format</label>
+            <label for="format" data-i18n="label_format">Format</label>
             <select id="format">
-                <option value="custom">Custom Size</option>
+                <option value="custom" data-i18n="opt_custom">Custom Size</option>
                 <option value="a4" selected>A4 (210 x 297 mm)</option>
                 <option value="a3">A3 (297 x 420 mm)</option>
                 <option value="a5">A5 (148 x 210 mm)</option>
-                <option value="business_card">Business Card (85 x 55 mm)</option>
+                <option value="business_card" data-i18n="opt_card">Business Card (85 x 55 mm)</option>
             </select>
         </div>
 
         <div class="row">
             <div class="form-group">
-                <label for="width">Width (mm)</label>
+                <label for="width"><span data-i18n="label_width">Width</span> (mm)</label>
                 <input type="number" id="width" value="210">
             </div>
             <div class="form-group">
-                <label for="height">Height (mm)</label>
+                <label for="height"><span data-i18n="label_height">Height</span> (mm)</label>
                 <input type="number" id="height" value="297">
             </div>
         </div>
 
         <div class="row">
             <div class="form-group">
-                <label for="gsm">Paper Weight (g/m²)</label>
-                <input type="number" id="gsm" value="80" placeholder="e.g. 80">
+                <label for="gsm"><span data-i18n="label_gsm">Weight</span> (g/m²)</label>
+                <input type="number" id="gsm" value="80">
             </div>
-            <div class="form-group">
-                <label for="quantity">Quantity (sheets)</label>
-                <input type="number" id="quantity" value="1000">
+            <div class="form-group hidden" id="pages-group">
+                <label for="pages" data-i18n="label_pages">Number of Pages</label>
+                <input type="number" id="pages" value="32">
             </div>
         </div>
 
-        <div class="result-box">
-            <span class="label">Total Weight:</span>
-            <span id="result">0.00 kg</span>
+        <div class="form-group">
+            <label for="quantity" data-i18n="label_quantity">Quantity (Copies)</label>
+            <input type="number" id="quantity" value="1000">
         </div>
+
+        <div class="results-container">
+            <div class="result-box">
+                <span class="label" data-i18n="res_weight">Total Weight:</span>
+                <span id="result-weight">0.00 kg</span>
+            </div>
+            <div class="result-box secondary">
+                <span class="label" data-i18n="res_height">Stack Height:</span>
+                <span id="result-height">0.0 cm</span>
+            </div>
+        </div>
+
+        <div class="info-text" id="formula-display">
+            </div>
+
     </div>
     
     <footer>
