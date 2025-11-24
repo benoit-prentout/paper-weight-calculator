@@ -17,7 +17,7 @@ A lightweight, open-source tool for printers, graphic designers, and logistics m
 * **📱 Responsive:** Works perfectly on mobile, tablets, and desktops.
 * **🚀 SEO Optimized:** Meta tags included for better search engine indexing.
 
-## 🧮 How it Works ( The Math)
+## 🧮 How it Works
 
 This tool uses standard industry formulas to ensure accuracy.
 
@@ -33,16 +33,8 @@ $$\text{Weight (kg)} = \frac{\text{Width (m)} \times \text{Height (m)} \times \t
 We estimate the bulk based on standard paper thickness (approx. 1 sheet = GSM in microns):
 $$\text{Height (cm)} = \frac{\text{GSM} \times \text{Total Sheets}}{10000}$$
 
-## 🛠 Installation & Usage
-
+## 🛠 Tech
 This project uses **Vanilla HTML, CSS, and JavaScript**. No build tools (npm, webpack, etc.) are required.
-
-### Run Locally
-1.  Clone the repository:
-    ```bash
-    git clone [https://github.com/benoit-prentout/paper-weight-calculator.git](https://github.com/benoit-prentout/paper-weight-calculator.git)
-    ```
-2.  Open `index.html` in your web browser.
 
 ### Hosting
 This project is designed to be hosted on **GitHub Pages**.
@@ -50,16 +42,6 @@ This project is designed to be hosted on **GitHub Pages**.
 2.  Click on **Pages**.
 3.  Select `main` branch as the source.
 4.  Your site will be live at `https://yourusername.github.io/paper-weight-calculator/`.
-
-## 🤝 Contributing
-
-Contributions are welcome! If you want to add more paper formats (US Letter, Legal) or refine the thickness calculation logic:
-
-1.  Fork the project.
-2.  Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4.  Push to the branch (`git push origin feature/AmazingFeature`).
-5.  Open a Pull Request.
 
 ## 📝 License
 
