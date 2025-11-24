@@ -1,4 +1,9 @@
-// --- CONFIGURATION & DATA ---
+// --- ICONS (SVG) ---
+const ICON_MOON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+const ICON_SUN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+
+// --- DATA ---
 const sizes = {
     a4: { w: 210, h: 297 },
     a3: { w: 297, h: 420 },
@@ -69,18 +74,15 @@ let isDarkMode = false;
 
 // --- FUNCTIONS ---
 
-// 1. Theme Switcher
 function toggleTheme() {
     isDarkMode = !isDarkMode;
-    // Set attribute on HTML tag for CSS to detect
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-    // Change Icon: If Dark mode is active, show Sun (to switch back), else Moon
-    themeBtn.textContent = isDarkMode ? '☀️' : '🌙';
+    // Render SVG: If dark mode, show Sun (to switch back to light), else Moon
+    themeBtn.innerHTML = isDarkMode ? ICON_SUN : ICON_MOON;
 }
 
-// 2. Language Switcher
 function updateLanguage() {
-    // Translate Text
+    // Translate text
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[currentLang][key]) {
@@ -88,8 +90,8 @@ function updateLanguage() {
         }
     });
 
-    // Update Flag Button: Show the flag of the OTHER language (the destination)
-    langBtn.textContent = currentLang === 'en' ? '🇫🇷' : '🇬🇧';
+    // Update Language Button Text (Show the option to switch TO)
+    langBtn.textContent = currentLang === 'en' ? 'FR' : 'EN';
     
     updateFormulaText();
 }
@@ -97,10 +99,9 @@ function updateLanguage() {
 function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'fr' : 'en';
     updateLanguage();
-    calculate(); // Recalculate to update potential units text if any
+    calculate();
 }
 
-// 3. Mode Switcher
 function updateMode() {
     modeRadios.forEach(radio => {
         if (radio.checked) currentMode = radio.value;
@@ -124,7 +125,6 @@ function updateFormulaText() {
     }
 }
 
-// 4. Calculation Logic
 function calculate() {
     const width_m = (parseFloat(inputs[0].value) || 0) / 1000;
     const height_m = (parseFloat(inputs[1].value) || 0) / 1000;
@@ -144,7 +144,6 @@ function calculate() {
         totalPhysicalSheets = quantity;
     }
 
-    // Weight
     const weightInKg = totalWeightGrams / 1000;
     if (weightInKg < 1) {
         resultWeight.textContent = totalWeightGrams.toFixed(1) + " g";
@@ -152,15 +151,15 @@ function calculate() {
         resultWeight.textContent = weightInKg.toFixed(2) + " kg";
     }
 
-    // Height (Stack)
     const thickness_cm = ((gsm * totalPhysicalSheets) / 1000) / 10;
     resultHeight.textContent = thickness_cm.toFixed(1) + " cm";
 }
 
-// --- EVENTS ---
+// --- EVENT LISTENERS ---
 themeBtn.addEventListener('click', toggleTheme);
 langBtn.addEventListener('click', toggleLanguage);
 modeRadios.forEach(r => r.addEventListener('change', updateMode));
+
 formatSelect.addEventListener('change', (e) => {
     if (sizes[e.target.value]) {
         inputs[0].value = sizes[e.target.value].w;
@@ -168,15 +167,20 @@ formatSelect.addEventListener('change', (e) => {
         calculate();
     }
 });
+
 inputs.forEach(i => i.addEventListener('input', () => {
     if (i === inputs[0] || i === inputs[1]) formatSelect.value = 'custom';
     calculate();
 }));
 
 // --- INIT ---
-// Check system preference for dark mode
+// Initialize theme based on system or default
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    toggleTheme(); 
+    toggleTheme();
+} else {
+    // Force default icon render
+    themeBtn.innerHTML = ICON_MOON;
 }
+
 updateLanguage();
 updateMode();
