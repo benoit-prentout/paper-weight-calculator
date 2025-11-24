@@ -1,12 +1,14 @@
-// --- ICONS (SVG) ---
+// --- ICONS (SVG Paths) ---
 const ICON_MOON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-
 const ICON_SUN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
 
 // --- DATA ---
 const sizes = {
+    a3: { w: 297, h: 420 },
+    a4: { w: 210, h: 297 },
     a5: { w: 148, h: 210 },
-    a6: { w: 105, h: 148 }, // AJOUT DU A6 (105 x 148 mm)
+    a6: { w: 105, h: 148 },
+    business_card: { w: 85, h: 55 }
 };
 
 const translations = {
@@ -26,7 +28,11 @@ const translations = {
         res_weight: "Total Weight:",
         res_height: "Stack Height:",
         formula_sheet: "Formula: Width x Height x GSM x Qty",
-        formula_brochure: "Formula: Width x Height x GSM x (Pages / 2) x Qty"
+        formula_brochure: "Formula: Width x Height x GSM x (Pages / 2) x Qty",
+        footer_open: "Open source project hosted on GitHub.",
+        footer_by: "Created by",
+        seo_title: "About this tool",
+        seo_text: "This free tool helps printers, graphic designers, and logistics managers calculate the total weight of a paper order. It supports standard formats (A4, A3, A5, A6), paper weight (GSM), and quantity. It also estimates the stack height (bulk) for shipping and the weight of stitched brochures or books."
     },
     fr: {
         title: "📄 Calculateur Poids Papier",
@@ -44,7 +50,11 @@ const translations = {
         res_weight: "Poids Total :",
         res_height: "Hauteur Pile :",
         formula_sheet: "Formule : Largeur x Hauteur x Grammage x Qté",
-        formula_brochure: "Formule : Largeur x Hauteur x Grammage x (Pages / 2) x Qté"
+        formula_brochure: "Formule : Largeur x Hauteur x Grammage x (Pages / 2) x Qté",
+        footer_open: "Projet open source hébergé sur GitHub.",
+        footer_by: "Créé par",
+        seo_title: "À propos de ce calculateur",
+        seo_text: "Cet outil gratuit permet aux imprimeurs, graphistes et logisticiens de calculer le poids total d'une commande de papier. Il prend en compte le format (A4, A3, A5, A6), le grammage (g/m²) et la quantité. Il permet également d'estimer la hauteur de la pile de papier (utile pour les cartons) et le poids de brochures agrafées ou dos carré collé."
     }
 };
 
@@ -75,22 +85,19 @@ let isDarkMode = false;
 function toggleTheme() {
     isDarkMode = !isDarkMode;
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-    // Render SVG: If dark mode, show Sun (to switch back to light), else Moon
+    // Render SVG
     themeBtn.innerHTML = isDarkMode ? ICON_SUN : ICON_MOON;
 }
 
 function updateLanguage() {
-    // Translate text
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[currentLang][key]) {
             el.textContent = translations[currentLang][key];
         }
     });
-
-    // Update Language Button Text (Show the option to switch TO)
+    // Toggle button text shows the OTHER language
     langBtn.textContent = currentLang === 'en' ? 'FR' : 'EN';
-    
     updateFormulaText();
 }
 
@@ -134,14 +141,17 @@ function calculate() {
     let totalWeightGrams = 0;
 
     if (currentMode === 'brochure') {
+        // Brochure formula: Area * GSM * (Pages/2) * Qty
         const sheetsPerCopy = pages / 2;
         totalWeightGrams = (width_m * height_m * gsm * sheetsPerCopy * quantity);
         totalPhysicalSheets = sheetsPerCopy * quantity;
     } else {
+        // Sheet formula
         totalWeightGrams = (width_m * height_m * gsm * quantity);
         totalPhysicalSheets = quantity;
     }
 
+    // Weight Display
     const weightInKg = totalWeightGrams / 1000;
     if (weightInKg < 1) {
         resultWeight.textContent = totalWeightGrams.toFixed(1) + " g";
@@ -149,6 +159,7 @@ function calculate() {
         resultWeight.textContent = weightInKg.toFixed(2) + " kg";
     }
 
+    // Height Display (Estimation: 1 sheet ~ GSM microns)
     const thickness_cm = ((gsm * totalPhysicalSheets) / 1000) / 10;
     resultHeight.textContent = thickness_cm.toFixed(1) + " cm";
 }
@@ -172,13 +183,11 @@ inputs.forEach(i => i.addEventListener('input', () => {
 }));
 
 // --- INIT ---
-// Initialize theme based on system or default
+// Check system preference for dark mode
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     toggleTheme();
 } else {
-    // Force default icon render
     themeBtn.innerHTML = ICON_MOON;
 }
-
 updateLanguage();
 updateMode();
