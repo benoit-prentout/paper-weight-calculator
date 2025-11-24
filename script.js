@@ -5,10 +5,8 @@ const ICON_SUN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fi
 
 // --- DATA ---
 const sizes = {
-    a4: { w: 210, h: 297 },
-    a3: { w: 297, h: 420 },
     a5: { w: 148, h: 210 },
-    business_card: { w: 85, h: 55 }
+    a6: { w: 105, h: 148 }, // AJOUT DU A6 (105 x 148 mm)
 };
 
 const translations = {
