@@ -122,29 +122,38 @@ p { color: var(--text-muted); margin-bottom: 1.5rem; }
 /* --- MODE SELECTOR --- */
 .mode-selector {
     display: flex;
-    gap: 10px;
+    gap: 5px; /* Espacement léger entre les boutons */
     margin-bottom: 1rem;
     background: var(--radio-bg);
     padding: 5px;
-    border-radius: 8px;
+    border-radius: 10px;
+    /* Alignement vertical centré */
+    align-items: stretch; 
 }
 
 .radio-label {
     flex: 1;
-    text-align: center;
+    position: relative;
     cursor: pointer;
+    display: flex;            /* Nouveau : Flexbox pour centrer le contenu */
+    justify-content: center;  /* Nouveau : Centrage horizontal */
+    align-items: center;      /* Nouveau : Centrage vertical */
 }
 
 .radio-label input { display: none; }
 
 .radio-label span {
     display: block;
-    padding: 8px;
-    border-radius: 6px;
+    width: 100%;              /* Prend toute la largeur disponible */
+    padding: 10px 0;          /* Padding vertical équilibré */
+    text-align: center;
+    border-radius: 8px;
     font-weight: 600;
     font-size: 0.9rem;
     color: var(--text-muted);
-    transition: all 0.2s;
+    transition: all 0.2s ease-in-out;
+    /* S'assure que le texte est bien centré verticalement */
+    line-height: 1.2; 
 }
 
 .radio-label input:checked + span {
